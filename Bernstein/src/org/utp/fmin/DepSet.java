@@ -136,27 +136,58 @@ public class DepSet extends ClassSet {
 	
 	
 	
-	public DepSet obcu() {
+	public ArrayList obcu() {
 		//Eliminacion atributos 
 		Iterator i = this.iterator();
-		DepSet ret = new DepSet();
-		DepSet dp = this.copie(); // Sacamos una copia del conjunto de
-									// dependecias funcionales LDS
-		// traverse each dep.
- 
+  
+		ArrayList xlista= new ArrayList();
+		ArrayList ylista= new ArrayList();
+		   int cantidad=0 ;
 		while (i.hasNext()) {
-                    		FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia					// de dependecias restantes
+                    		FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia				 
 			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
-			 // primera dependencia funcional
+			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de la
                         for (int x = 0; x < tma.size(); x++)
                         {
-                             System.out.print(tma.elementAt(x));
+                        	xlista.add( tma.elementAt(x).toString());
+                             
+                        	cantidad  +=1;
                         }
                        
-              			 
+                        for (int x = 0; x < tmay.size(); x++)
+                        {
+                        	ylista.add( tmay.elementAt(x).toString());
+                             
+                        	cantidad  +=1;
+                        }	
+                        
+                        
+                        
+                        
+                        Iterator  yiterdador = ylista.iterator();
+                        while(yiterdador.hasNext()){
+                        	String elementoy = yiterdador.next().toString();
+                        	
+                            Iterator  xiterdador = xlista.iterator();
+                            while(xiterdador.hasNext()){
+                            	String elementox = xiterdador.next().toString();
+                            	
+                            	
+                            	
+                            	
+                            	if(elementox.equals(elementoy))
+                            		xiterdador.remove();	// Eliminamos el Elemento que hemos obtenido del Iterator
+                            }
+                        	
+                        	 
+                        }
+                        
+                        
+                        
+                        
 			 
                 }
-                return ret;
+                return xlista;
                                 }
 	
 	
