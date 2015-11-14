@@ -1,5 +1,3 @@
-AE>C
-C->D 
-DE->F 
-A->E
-
+C>E,N,S
+X,E>S
+E>X
