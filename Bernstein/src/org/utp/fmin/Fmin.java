@@ -85,7 +85,8 @@ public class Fmin {
 			Salida += "Paso #4: Eliminar atributos Izq Redundantes:\n";
 			DepSet dp4 = dp3.fmin2(); // Elimina redundancias de atributos del
 										// lado izquierdo
-			  dp4.obcu();
+			dp4.obcu();
+			
 			Salida += dp4.toString() + "\n\n";
             
 			Salida += dp4.toFormat() + "\n";

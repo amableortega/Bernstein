@@ -43,12 +43,13 @@ public class DepSet extends ClassSet {
 		// Elimina atributos redundantes del lado Izquierdo
 		Iterator i = this.iterator();
 		DepSet ret = new DepSet();
-		//Analizamos cada Dependencia
+		// Analizamos cada Dependencia
 		while (i.hasNext()) {
 			FunDep fd = (FunDep) i.next();
 
 			ClassSet cs = fd.giveX();
-			if (cs.size() > 1) { //Solo analizamos las que tienen mas de un atributo del lado izq
+			if (cs.size() > 1) { // Solo analizamos las que tienen mas de un
+									// atributo del lado izq
 				cs = cs.reduction();
 				System.out.println(cs.toString());
 				// Encontramos los atributos candidatos
@@ -61,8 +62,8 @@ public class DepSet extends ClassSet {
 					if (tmp.closure(this).includes(fd.giveY()))
 						ch.add(n);
 				}
-				
-				if (ch.size() == 0) {//guardamos la dependencia funcional
+
+				if (ch.size() == 0) {// guardamos la dependencia funcional
 					ret.add(fd);
 				} else {
 					ClassSet win = ch.min();
@@ -98,7 +99,7 @@ public class DepSet extends ClassSet {
 	}
 
 	public DepSet mcnr() {
-		//Eliminacion de dependencias redundantes
+		// Eliminacion de dependencias redundantes
 		Iterator i = this.iterator();
 		DepSet ret = new DepSet();
 		DepSet dp = this.copie(); // Sacamos una copia del conjunto de
@@ -133,64 +134,51 @@ public class DepSet extends ClassSet {
 		return ret;
 
 	}
-	
-	
-	
+
 	public ArrayList obcu() {
-		//Eliminacion atributos 
+		// Eliminacion atributos
 		Iterator i = this.iterator();
-  
-		ArrayList xlista= new ArrayList();
-		ArrayList ylista= new ArrayList();
-		   int cantidad=0 ;
+
+		ArrayList xlista = new ArrayList();
+		ArrayList ylista = new ArrayList();
+		int cantidad = 0;
 		while (i.hasNext()) {
-                    		FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia				 
+			FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia
 			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
-			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de la
-                        for (int x = 0; x < tma.size(); x++)
-                        {
-                        	xlista.add( tma.elementAt(x).toString());
-                             
-                        	cantidad  +=1;
-                        }
-                       
-                        for (int x = 0; x < tmay.size(); x++)
-                        {
-                        	ylista.add( tmay.elementAt(x).toString());
-                             
-                        	cantidad  +=1;
-                        }	
-                        
-                        
-                        
-                        
-                        Iterator  yiterdador = ylista.iterator();
-                        while(yiterdador.hasNext()){
-                        	String elementoy = yiterdador.next().toString();
-                        	
-                            Iterator  xiterdador = xlista.iterator();
-                            while(xiterdador.hasNext()){
-                            	String elementox = xiterdador.next().toString();
-                            	
-                            	
-                            	
-                            	
-                            	if(elementox.equals(elementoy))
-                            		xiterdador.remove();	// Eliminamos el Elemento que hemos obtenido del Iterator
-                            }
-                        	
-                        	 
-                        }
-                        
-                        
-                        
-                        
-			 
-                }
-                return xlista;
-                                }
-	
-	
+			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de
+												// la
+			for (int x = 0; x < tma.size(); x++) {
+
+				if (!xlista.contains(tma.elementAt(x).toString()))
+					xlista.add(tma.elementAt(x).toString());
+
+			}
+
+			for (int x = 0; x < tmay.size(); x++) {
+
+				if (!ylista.contains(tmay.elementAt(x).toString()))
+					ylista.add(tmay.elementAt(x).toString());
+
+			}
+
+			Iterator yiterdador = ylista.iterator();
+			
+			while (yiterdador.hasNext()) {
+				String elementoy = yiterdador.next().toString();
+
+				Iterator xiterdador = xlista.iterator();
+				while (xiterdador.hasNext()) {
+					String elementox = xiterdador.next().toString();
+
+					if (elementox.equals(elementoy))
+						xiterdador.remove(); 												 
+				}
+
+			}
+
+		}
+		return xlista;
+	}
 
 	public DepSet copie() {
 		DepSet ret = new DepSet();
@@ -273,8 +261,7 @@ public class DepSet extends ClassSet {
 		Iterator i = this.iterator();
 		while (i.hasNext()) {
 			FunDep fd = (FunDep) i.next();
-			s = s + fd.giveX().toFPlusFormat() + ">"
-					+ fd.giveY().toFPlusFormat() + ";\n";
+			s = s + fd.giveX().toFPlusFormat() + ">" + fd.giveY().toFPlusFormat() + ";\n";
 		}
 
 		return s;
