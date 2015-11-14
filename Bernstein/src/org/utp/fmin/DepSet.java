@@ -133,6 +133,33 @@ public class DepSet extends ClassSet {
 		return ret;
 
 	}
+	
+	
+	
+	public DepSet obcu() {
+		//Eliminacion atributos 
+		Iterator i = this.iterator();
+		DepSet ret = new DepSet();
+		DepSet dp = this.copie(); // Sacamos una copia del conjunto de
+									// dependecias funcionales LDS
+		// traverse each dep.
+ 
+		while (i.hasNext()) {
+                    		FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia					// de dependecias restantes
+			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
+			 // primera dependencia funcional
+                        for (int x = 0; x < tma.size(); x++)
+                        {
+                             System.out.print(tma.elementAt(x));
+                        }
+                       
+              			 
+			 
+                }
+                return ret;
+                                }
+	
+	
 
 	public DepSet copie() {
 		DepSet ret = new DepSet();

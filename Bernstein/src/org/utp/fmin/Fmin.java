@@ -1,12 +1,13 @@
-package org.utp.fmin;
-
-import java.awt.event.ActionEvent;
-import java.util.StringTokenizer;
 /**
  * Clase encargada de realizar la ejecucion paso a paso del algoritmo de Bernstein.
  * @author aortega
  *
  */
+package org.utp.fmin;
+
+import java.awt.event.ActionEvent;
+import java.util.StringTokenizer;
+
 public class Fmin {
 	private ClassSet attributes = new ClassSet();
 	private DepSet dependencies = new DepSet();
@@ -84,6 +85,7 @@ public class Fmin {
 			Salida += "Paso #4: Eliminar atributos Izq Redundantes:\n";
 			DepSet dp4 = dp3.fmin2(); // Elimina redundancias de atributos del
 										// lado izquierdo
+			  dp4.obcu();
 			Salida += dp4.toString() + "\n\n";
             
 			Salida += dp4.toFormat() + "\n";
