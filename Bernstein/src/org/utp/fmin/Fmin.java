@@ -2,7 +2,11 @@ package org.utp.fmin;
 
 import java.awt.event.ActionEvent;
 import java.util.StringTokenizer;
-
+/**
+ * Clase encargada de realizar la ejecucion paso a paso del algoritmo de Bernstein.
+ * @author aortega
+ *
+ */
 public class Fmin {
 	private ClassSet attributes = new ClassSet();
 	private DepSet dependencies = new DepSet();
