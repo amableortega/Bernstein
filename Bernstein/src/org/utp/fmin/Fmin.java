@@ -93,6 +93,7 @@ public class Fmin {
 			if(uKeyCexist==false)
 			{
 				sqlU=dp4.crear_tabla(llavesCU); 
+				
 			
 			}
 			

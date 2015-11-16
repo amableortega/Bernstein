@@ -243,6 +243,7 @@ public class DepSet extends ClassSet {
 			if(x!=(cantidaBuscar-1))
 			{
 				sql +=",";
+				
 			}
 			
 			
