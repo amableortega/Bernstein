@@ -141,7 +141,10 @@ public class DepSet extends ClassSet {
 
 		ArrayList xlista = new ArrayList();
 		ArrayList ylista = new ArrayList();
+
 		int cantidad = 0;
+
+
 		while (i.hasNext()) {
 			FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia
 			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
@@ -177,6 +180,87 @@ public class DepSet extends ClassSet {
 		}
 		return xlista;
 	}
+
+
+	
+	
+	public boolean 	comprobar_llave(ArrayList llavesCU)
+	{
+		boolean resultado = false ;
+		Iterator i = this.iterator();
+
+		ArrayList llavesUlista =   llavesCU;
+ 
+	 
+		int cantidaBuscar = llavesUlista.size();
+		
+		while (i.hasNext()) {
+			FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia
+			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
+			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de
+											 
+			
+			int cEncontrada = 0;
+			for (int x = 0; x < tma.size(); x++) {
+				
+		    String comprobando=tma.elementAt(x).toString(); 
+			if(	llavesUlista.contains(comprobando))
+			{
+				cEncontrada +=1;
+			}
+ 
+			}
+			
+			if(cEncontrada==cantidaBuscar)
+			{
+				resultado = true;
+				
+			}
+			
+
+		}
+		
+		return resultado;
+	}
+	
+	
+	
+	public String 	crear_tabla(ArrayList llavesCU)
+	{
+		
+		String sql="CREATE TABLE IF NOT EXISTS tablaU (";
+		
+ 
+
+		ArrayList llavesUlista =   llavesCU;
+ 
+	 
+		int cantidaBuscar = llavesUlista.size();
+		
+		for (int x = 0; x <cantidaBuscar; x++) {
+			
+			String Columna =(String) llavesUlista.get(x);
+			
+			sql += Columna  + " int(11) NOT NULL ";
+			
+			if(x!=(cantidaBuscar-1))
+			{
+				sql +=",";
+				
+			}
+			
+			
+		}
+			sql +=")";
+			
+			return sql;
+		 
+	}
+	
+	
+	
+	
+	
 
 	public DepSet copie() {
 		DepSet ret = new DepSet();
@@ -259,8 +343,7 @@ public class DepSet extends ClassSet {
 		Iterator i = this.iterator();
 		while (i.hasNext()) {
 			FunDep fd = (FunDep) i.next();
-			s = s + fd.giveX().toFPlusFormat() + ">"
-					+ fd.giveY().toFPlusFormat() + ";\n";
+			s = s + fd.giveX().toFPlusFormat() + ">" + fd.giveY().toFPlusFormat() + ";\n";
 		}
 
 		return s;

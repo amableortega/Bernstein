@@ -6,6 +6,7 @@
 package org.utp.fmin;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Fmin {
@@ -83,9 +84,19 @@ public class Fmin {
 			DepSet dp3 = dp2.mcnr(); // Elimina Dependencias Redundantes
 			Salida += dp3.toString() + "\n";
 			Salida += "Paso #4: Eliminar atributos Izq Redundantes:\n";
-			DepSet dp4 = dp3.fmin2(); // Elimina redundancias de atributos del
-										// lado izquierdo
-			  dp4.obcu();
+			DepSet dp4 = dp3.fmin2();
+			ArrayList llavesCU= dp4.obcu();
+			
+			// Comprobar si se encuentra  las llaves candidate de U 
+			boolean uKeyCexist= dp4.comprobar_llave(llavesCU);
+			String sqlU="";
+			if(uKeyCexist==false)
+			{
+				sqlU=dp4.crear_tabla(llavesCU); 
+				
+			
+			}
+			
 			Salida += dp4.toString() + "\n\n";
             
 			Salida += dp4.toFormat() + "\n";
