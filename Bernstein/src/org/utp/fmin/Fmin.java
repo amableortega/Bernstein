@@ -101,6 +101,8 @@ public class Fmin {
             
 			Salida += dp4.toFormat() + "\n";
 			System.out.println("***"+dp4.toFormat());
+			Salida += dp4.toFormatCU() + "\n";
+			
 		} else
 			Salida += "Error cargando atributos o dependencias!";
 		return Salida;

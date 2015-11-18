@@ -3,7 +3,7 @@ package org.utp.fmin;
 import java.util.*;
 
 public class DepSet extends ClassSet {
-
+	 protected ArrayList arrayCU;
 	/**
 	 * A partir de un conjunto de dependencias funcionales, se devuelve un nuevo
 	 * conjunto de dependencias cada uno llamda "Lado Derecho Simple"
@@ -149,17 +149,17 @@ public class DepSet extends ClassSet {
 			FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia
 			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
 			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de
-												// la
+											 
 			for (int x = 0; x < tma.size(); x++) {
+				if(!xlista.contains(tma.elementAt(x)))
 				xlista.add(tma.elementAt(x).toString());
-
-				cantidad += 1;
+ 
 			}
 
 			for (int x = 0; x < tmay.size(); x++) {
+				if(!ylista.contains(tmay.elementAt(x)))
 				ylista.add(tmay.elementAt(x).toString());
-
-				cantidad += 1;
+ 
 			}
 
 			Iterator yiterdador = ylista.iterator();
@@ -178,6 +178,7 @@ public class DepSet extends ClassSet {
 			}
 
 		}
+		this.arrayCU = xlista;
 		return xlista;
 	}
 
@@ -348,6 +349,27 @@ public class DepSet extends ClassSet {
 
 		return s;
 	}
+	
+	
+	public String toFormatCU ( ) {
+		String s = "";
+	int	cantidad  = this.arrayCU.size();
+		for (int x = 0; x <cantidad  ; x++) {
+			s =s + this.arrayCU.get(x).toString();
+	
+			if(x!=(cantidad-1))
+			{
+				s +=",";
+				
+			}else
+			{
+			   s += ";\n";
+			}
+		}
+
+		return s;
+	}
+	
 
 	public String toHumanFormat() {
 		String s = "";
