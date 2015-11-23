@@ -3,7 +3,8 @@ package org.utp.fmin;
 import java.util.*;
 
 public class DepSet extends ClassSet {
-	 protected ArrayList arrayCU;
+	protected ArrayList arrayCU, arrayDerecha, arrayIzDer;
+
 	/**
 	 * A partir de un conjunto de dependencias funcionales, se devuelve un nuevo
 	 * conjunto de dependencias cada uno llamda "Lado Derecho Simple"
@@ -135,133 +136,191 @@ public class DepSet extends ClassSet {
 
 	}
 
+	/*
+	 * Obtener el conjunto de atributos que solo aparecen al lado izquierdo
+	 * Obtener lo que solo aparecen en el lado derecho Obtener los atributos que
+	 * aparecen al lado Izquierdo y derecho
+	 */
 	public ArrayList obcu() {
 		// Eliminacion atributos
 		Iterator i = this.iterator();
 
 		ArrayList xlista = new ArrayList();
 		ArrayList ylista = new ArrayList();
-
+		ArrayList xylista = new ArrayList();
 		int cantidad = 0;
-
 
 		while (i.hasNext()) {
 			FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia
 			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
 			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de
-											 
+
 			for (int x = 0; x < tma.size(); x++) {
-				if(!xlista.contains(tma.elementAt(x)))
-				xlista.add(tma.elementAt(x).toString());
- 
+				if (!xlista.contains(tma.elementAt(x)))
+					xlista.add(tma.elementAt(x).toString());
+
 			}
 
 			for (int x = 0; x < tmay.size(); x++) {
-				if(!ylista.contains(tmay.elementAt(x)))
-				ylista.add(tmay.elementAt(x).toString());
- 
+				if (!ylista.contains(tmay.elementAt(x)))
+					ylista.add(tmay.elementAt(x).toString());
+
 			}
 
-			Iterator yiterdador = ylista.iterator();
-			while (yiterdador.hasNext()) {
-				String elementoy = yiterdador.next().toString();
+		}
+		Iterator yiterdador = ylista.iterator();
+		while (yiterdador.hasNext()) {
+			String elementoy = yiterdador.next().toString();
 
-				Iterator xiterdador = xlista.iterator();
-				while (xiterdador.hasNext()) {
-					String elementox = xiterdador.next().toString();
+			Iterator xiterdador = xlista.iterator();
+			while (xiterdador.hasNext()) {
+				String elementox = xiterdador.next().toString();
 
-					if (elementox.equals(elementoy))
-						xiterdador.remove(); // Eliminamos el Elemento que hemos
-												// obtenido del Iterator
+				if (elementox.equals(elementoy)) {
+					xylista.add(elementox); // Se optiene el elemento que esta a
+											// la izquierda y derecha
+					xiterdador.remove();
+					yiterdador.remove();
+					break;
 				}
 
 			}
 
 		}
+
 		this.arrayCU = xlista;
+		this.arrayIzDer = xylista;
+		this.arrayDerecha = ylista;
+
 		return xlista;
 	}
 
-
-	
-	
-	public boolean 	comprobar_llave(ArrayList llavesCU)
-	{
-		boolean resultado = false ;
+	public boolean comprobar_llave() {
+		System.out.println("Encontrar el atributo o conjunto de atributos que determine a  todos los demas");
+		
+		boolean resultado = false;
+		// Reccorer todas las dependencias 
 		Iterator i = this.iterator();
+		ArrayList  Listaizq = (ArrayList) arrayCU.clone();
+		ListIterator XUIzquierdo = Listaizq.listIterator();
+		int cantidaBuscar = arrayCU.size() + arrayIzDer.size() + arrayDerecha.size();
+		int contadoDependencias = 0;
+		ArrayList keyU =(ArrayList) arrayCU.clone();
+		System.out.println("Cantida Objetivo" + cantidaBuscar );
 
-		ArrayList llavesUlista =   llavesCU;
- 
-	 
-		int cantidaBuscar = llavesUlista.size();
+		boolean findllaveU = true;
+		boolean buscarCambio = true;
 		
-		while (i.hasNext()) {
-			FunDep fd = (FunDep) i.next(); // Analizamos la primera dependencia
-			ClassSet tma = fd.giveX().copy(); // Obtengo el lado Izquierdo de la
-			ClassSet tmay = fd.giveY().copy(); // Obtengo el lado Izquierdo de
-											 
-			
+        int interacion=0;
+        
+		while (findllaveU) {
+
 			int cEncontrada = 0;
-			for (int x = 0; x < tma.size(); x++) {
-				
-		    String comprobando=tma.elementAt(x).toString(); 
-			if(	llavesUlista.contains(comprobando))
-			{
-				cEncontrada +=1;
-			}
- 
-			}
+			Listaizq = arrayCU; 
+			cEncontrada = arrayCU.size() + interacion ;
 			
-			if(cEncontrada==cantidaBuscar)
+			if(buscarCambio)
 			{
-				resultado = true;
 				
+			buscarCambio = false;
+		   
+			if(interacion>=1)
+		    {
+		     Listaizq.add(arrayIzDer.get(interacion));
+		     keyU.add(arrayIzDer.get(interacion));
+		     i = this.iterator(); 
 			}
-			
 
-		}
+		 while (i.hasNext()) { 
+			 contadoDependencias +=1;
+			 System.out.println("Iniciando la busqueda en la dependencias -> " + contadoDependencias) ;
+				// while de dependencias fucionales
+				FunDep fd = (FunDep) i.next(); // Analizamos la primera
+												// dependencia
+				ClassSet tma = fd.giveX().copy();  //Obtiene el conjunto de 
+													//atributos del lado Izquierdo
+				ClassSet tmay = fd.giveY().copy(); // Obtengo el lado derecho 
+							 
+				
+				
+				for (int  liz = 0; liz < Listaizq.size(); liz++) {
+	 			// Obtener el elemento del lado X
+					String elIzq = Listaizq.get(liz).toString();
+					// Recorremos lado X de las dependencias funcionales
+				for (int x = 0; x < tma.size(); x++) {
+						String comladoX = tma.elementAt(x).toString();
+
+						if (elIzq.equals(comladoX)) {
+							int cY = tmay.size();
+											
+							for (int evalY = 0; evalY < cY; evalY++) {
+								String comladoY = tmay.elementAt(evalY).toString();
+								
+								if (!Listaizq.contains(comladoY)) {
+									Listaizq.add(tmay.elementAt(evalY));
+										cEncontrada += 1;
+									System.out.println("Encontre un atributo " + comladoY   + " es el atriburo número  " + cEncontrada  );	
+									buscarCambio= true;
+								}
+							}
+								
+						}
+					}// end for x
+				}// end while XUIzquierdo
+			}//End de dependencias funcionales for Lizquierdo
+				
+		if(cantidaBuscar==cEncontrada)
+		{
+				buscarCambio=false;
+				
+				
+				
+				System.out.println("Dependencias ->");	
+				
+				for (int  liz = 0; liz < keyU.size(); liz++) {
+					 System.out.print("  " + keyU.get(liz));	
+					}
+				System.out.println(" ->");	
+				for (int  liz = 0; liz < Listaizq.size(); liz++) {
+				 System.out.print("  " + Listaizq.get(liz));	
+				}
+				System.out.println("<- ");	
+				
+				findllaveU=false;
+				
+			}
+		} // cantidad total de atributos 
+			System.out.println("he encontrado todos los atributos Congratulation " );	
+			}// end while final
 		
-		return resultado;
+		return findllaveU;
 	}
-	
-	
-	
-	public String 	crear_tabla(ArrayList llavesCU)
-	{
-		
-		String sql="CREATE TABLE IF NOT EXISTS tablaU (";
-		
- 
 
-		ArrayList llavesUlista =   llavesCU;
- 
-	 
+	public String crear_tabla(ArrayList llavesCU) {
+
+		String sql = "CREATE TABLE IF NOT EXISTS tablaU (";
+
+		ArrayList llavesUlista = llavesCU;
+
 		int cantidaBuscar = llavesUlista.size();
-		
-		for (int x = 0; x <cantidaBuscar; x++) {
-			
-			String Columna =(String) llavesUlista.get(x);
-			
-			sql += Columna  + " int(11) NOT NULL ";
-			
-			if(x!=(cantidaBuscar-1))
-			{
-				sql +=",";
-				
+
+		for (int x = 0; x < cantidaBuscar; x++) {
+
+			String Columna = (String) llavesUlista.get(x);
+
+			sql += Columna + " int(11) NOT NULL ";
+
+			if (x != (cantidaBuscar - 1)) {
+				sql += ",";
+
 			}
-			
-			
+
 		}
-			sql +=")";
-			
-			return sql;
-		 
+		sql += ")";
+
+		return sql;
+
 	}
-	
-	
-	
-	
-	
 
 	public DepSet copie() {
 		DepSet ret = new DepSet();
@@ -349,27 +408,23 @@ public class DepSet extends ClassSet {
 
 		return s;
 	}
-	
-	
-	public String toFormatCU ( ) {
+
+	public String toFormatCU() {
 		String s = "";
-	int	cantidad  = this.arrayCU.size();
-		for (int x = 0; x <cantidad  ; x++) {
-			s =s + this.arrayCU.get(x).toString();
-	
-			if(x!=(cantidad-1))
-			{
-				s +=",";
-				
-			}else
-			{
-			   s += ";\n";
+		int cantidad = this.arrayCU.size();
+		for (int x = 0; x < cantidad; x++) {
+			s = s + this.arrayCU.get(x).toString();
+
+			if (x != (cantidad - 1)) {
+				s += ",";
+
+			} else {
+				s += ";\n";
 			}
 		}
 
 		return s;
 	}
-	
 
 	public String toHumanFormat() {
 		String s = "";

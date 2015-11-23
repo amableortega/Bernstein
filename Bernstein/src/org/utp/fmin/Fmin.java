@@ -86,16 +86,11 @@ public class Fmin {
 			Salida += "Paso #4: Eliminar atributos Izq Redundantes:\n";
 			DepSet dp4 = dp3.fmin2();
 			ArrayList llavesCU= dp4.obcu();
+			dp4.comprobar_llave();
 			
 			// Comprobar si se encuentra  las llaves candidate de U 
-			boolean uKeyCexist= dp4.comprobar_llave(llavesCU);
-			String sqlU="";
-			if(uKeyCexist==false)
-			{
-				sqlU=dp4.crear_tabla(llavesCU); 
-				
-			
-			}
+	 
+		 
 			
 			Salida += dp4.toString() + "\n\n";
             

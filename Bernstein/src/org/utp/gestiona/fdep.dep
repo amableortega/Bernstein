@@ -1,3 +1,4 @@
-C>E,N,S
-X,E>S
-E>X
+A,E>C
+C->D 
+D,E>F 
+A>E
