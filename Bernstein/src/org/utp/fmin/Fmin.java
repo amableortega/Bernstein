@@ -7,6 +7,7 @@ package org.utp.fmin;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class Fmin {
@@ -54,7 +55,10 @@ public class Fmin {
 																// los atributos
 				while (at.hasMoreTokens()) { // agregamos los atributos a nuetra
 												// colecccion de objetos
-					x.add(at.nextToken());
+					String at_tmp = at.nextToken();
+					x.add(at_tmp);
+					attributes.add(at_tmp);
+
 				}
 			} else
 				return false;
@@ -62,7 +66,9 @@ public class Fmin {
 										// dependencia
 				at = new StringTokenizer(dep.nextToken(), ",");
 				while (at.hasMoreTokens()) {
-					y.add(at.nextToken());
+					String at_tmp = at.nextToken();
+					y.add(at_tmp);
+					attributes.add(at_tmp);
 				}
 			} else
 				return false;
@@ -73,6 +79,7 @@ public class Fmin {
 	}
 
 	public String ejecuta(String atributos, String dependencias) {
+
 		String Salida = "";
 		if (this.loadDependencies(dependencias)) {
 			Salida = "Paso #1: Conjunto de dependencias funcionales originales:\n";
@@ -85,21 +92,54 @@ public class Fmin {
 			Salida += dp3.toString() + "\n";
 			Salida += "Paso #4: Eliminar atributos Izq Redundantes:\n";
 			DepSet dp4 = dp3.fmin2();
-			ArrayList llavesCU= dp4.obcu();
-			dp4.comprobar_llave();
-			
-			// Comprobar si se encuentra  las llaves candidate de U 
-	 
-		 
-			
-			Salida += dp4.toString() + "\n\n";
-            
-			Salida += dp4.toFormat() + "\n";
-			System.out.println("***"+dp4.toFormat());
-			Salida += dp4.toFormatCU() + "\n";
-			
+			Salida += dp4.toString() + "\n";
+			Salida += "Paso #5: Llaves candidatas\n";
+			Salida += "Conjunto de atributos:  " + attributes.toString() + "\n";
+			ClassSet cc = attributes.llavesCandidatas(dp4);
+			Salida += cc.toString() + "\n";
+			Salida += "Paso #6: Reunion DF con el mismo lado Izquierdo\n";
+			DepSet dp5 = dp4.reunionDeDependencias();
+			Salida += dp4.reunionDeDependencias() + "\n";
+			Salida += "Paso #7: Crear Tablas\n";
+			Salida += dp5.formatoTabla(dp5) + "\n";
+			Salida += "Paso #8: Losless Descomposición\n";
+			if (dp5.depLoss(dp5, cc)) {
+				System.out.println("!Hay perdida!");
+				Salida += dp5.formatoTabla(dp5) + "\n";
+				Salida += this.agregaCandidata(cc);
+			}
+
 		} else
 			Salida += "Error cargando atributos o dependencias!";
 		return Salida;
+	}
+	// metodo para crear la tabla adicional( si alguna de llave candidata no aparece en las tablas creadas en paso 7)
+	public String agregaCandidata(ClassSet cc) {
+		String strTabla = "";
+		// Iterator i = cc.iterator();
+		System.out.println(cc.toHumanFormat());
+		String key = cc.elementAt(0).toString();
+		key = key.substring(0, key.length() - 1);
+		key = key.substring(1, key.length());
+		System.out.println(key);
+		String tmp[] = key.split(",");
+		strTabla += "\nCREATE TABLE R (\n";
+		for (int i = 0; i < tmp.length; i++) {
+			strTabla = strTabla + "      " + tmp[i] + "  INTEGER NOT NULL ,\n";
+			// if (i < (this.size() - 1))
+			// s = s + ",\n";
+		}
+		strTabla += " PRIMARY KEY ( ";
+		for (int k = 0; k < tmp.length; k++) {
+			strTabla += tmp[k];
+			if (k < (tmp.length - 1))
+				strTabla = strTabla + ",";
+		}
+		strTabla += "));";
+		// ClassSet c = f.toRelation();
+		// strTabla += "\nCREATE TABLE R(\n"+i.next()+ ");";
+
+		return strTabla;
+
 	}
 }

@@ -52,7 +52,10 @@ public class Interfaz extends javax.swing.JFrame {
 	
 	// <editor-fold defaultstate="collapsed"
 	// desc="Generated Code">//GEN-BEGIN:initComponents
+	
+	//carga los objetos al momento de ejecutar el programa.
 	private void initComponents() {
+		//pántalla de menu.
 		this.setSize(800,600); 
 		this.setResizable(true); 
 		this.setVisible(true); 
@@ -77,7 +80,7 @@ public class Interfaz extends javax.swing.JFrame {
 
 		jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 		jPanel1.setLayout(new java.awt.GridBagLayout());
-
+		//Texto que aparece en el menú.
 		jMenu1.setText("Archivo");
 
 		mAbrir.setText("Cargar Dependencias  *.dep");
@@ -88,8 +91,10 @@ public class Interfaz extends javax.swing.JFrame {
 		});
 		jMenu1.add(mAbrir);
 
-		mGuardarComo.setText("Generar F+...");
+		mGuardarComo.setText("Generar 3FN...");
+		//detectar y manejar eventos de acción
 		mGuardarComo.addActionListener(new java.awt.event.ActionListener() {
+			//capture los eventos
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				mGuardarComoActionPerformed(evt);
 			}
@@ -103,8 +108,10 @@ public class Interfaz extends javax.swing.JFrame {
 		jMenuBar1.add(jMenu1);
 
 		mSgte.setText("Siguiente");
+		//detectar y manejar eventos de acción
 		mSgte.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				//capture los eventos
 				mSgteActionPerformed(evt);
 			}
 		});
@@ -114,7 +121,7 @@ public class Interfaz extends javax.swing.JFrame {
 		//jMenuBar1.add(jMenu2);
 
 		setJMenuBar(jMenuBar1);
-
+		//permite establecer de manera precisa la posición y el tamaño de cada componente dentro del contenedor. 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
 		getContentPane().setLayout(layout);
@@ -195,6 +202,7 @@ public class Interfaz extends javax.swing.JFrame {
 	 *            the command line arguments
 	 */
 	public static void main(String args[]) {
+		//utiliza para actualizar componentes
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				new Interfaz().setVisible(true);

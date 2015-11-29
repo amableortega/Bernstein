@@ -26,7 +26,7 @@ public class FunDep {
   }
 
   public String toHumanFormat(){
-    return(x.toFPlusFormat() + "->" + y.toFPlusFormat());
+    return(x.toFPlusFormat() + "->" + y.toFPlusFormat());// separador  entre cada letra 
   }
 
   public boolean equiv(FunDep f){

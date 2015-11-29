@@ -24,6 +24,7 @@ public class XFichero {
 	private ArrayList<String> contenido = new ArrayList<String>();// almacena los registros
 													// leidos de *.dep
 	private String depFun = "";
+	private String atributos="";
 
 	// Constructor de clase
 	public XFichero() {
@@ -44,12 +45,15 @@ public class XFichero {
 	public void GuardarComo(String texto) {
 		fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(filter);
+		// seleccionar  fichero para guardar datos
 		int result = fileChooser.showSaveDialog(null);
+		//mostrar ventana para la selección de un fichero
 		if (result == JFileChooser.APPROVE_OPTION) {
 			this.isopen = false;
 			this.contenido.clear();
-
+			// elegir un fichero de una lista
 			if (escribir(fileChooser.getSelectedFile(), texto)) {
+				// capturar y mostrar datos de forma 
 				JOptionPane.showMessageDialog(null, "Archivo '"
 						+ fileChooser.getSelectedFile().getName()
 						+ "' guardado ");
@@ -137,9 +141,14 @@ public class XFichero {
 			this.contenido.clear();
 			this.depFun="";
 			String linea;
+			//lee una línea de texto
 			while ((linea = reader.readLine()) != null) {
 				this.contenido.add(linea);
 				this.depFun += linea + "\n";
+//				String tmp[]=linea.split(">");
+//				atribx=tmp[0].split(",");
+				
+				
 			}
 
 			return true;
@@ -147,6 +156,7 @@ public class XFichero {
 			System.out.println("Error: " + ex);
 		} finally {
 			try {
+				//cierre los lectores encadenados
 				reader.close();
 			} catch (IOException ex) {
 				System.out.println("Error: " + ex);
